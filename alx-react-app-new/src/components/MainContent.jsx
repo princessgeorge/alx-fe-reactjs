@@ -1,4 +1,4 @@
-function MainContent() {
+const MainContent = () => {
   return (
     <main
       style={{
@@ -8,14 +8,14 @@ function MainContent() {
       }}
     >
       <h2 style={{ textAlign: 'center', color: 'darkgreen' }}>
-        Welcome to My City List
+        My Favorite Cities
       </h2>
 
       <p style={{ fontSize: '18px', marginTop: '15px' }}>
-        Here are some of my favorite cities around the world.
+        I love to visit New York, Paris, and Tokyo.
       </p>
     </main>
   );
-}
+};
 
 export default MainContent;

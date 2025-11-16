@@ -1,4 +1,4 @@
-function Footer() {
+const Footer = () => {
   return (
     <footer
       style={{
@@ -12,6 +12,6 @@ function Footer() {
       <p>© 2025 My Favorite Cities App</p>
     </footer>
   );
-}
+};
 
 export default Footer;
