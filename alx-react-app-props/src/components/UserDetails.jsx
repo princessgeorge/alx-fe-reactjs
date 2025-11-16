@@ -1,15 +1,21 @@
-import { useContext } from 'react';
-import UserContext from '../UserContext';
+import React, { useContext } from 'react';
+import { UserContext } from './UserContext';
 
-function UserDetails() {
+const UserDetails = () => {
   const userData = useContext(UserContext);
 
+  if (!userData) {
+    return <p>Loading user data...</p>;
+  }
+
   return (
-    <div style={{ border: '1px solid gray', padding: '10px', margin: '10px' }}>
-      <h2 style={{ color: 'blue' }}>{userData.name}</h2>
-      <p>Email: {userData.email}</p>
+    <div>
+      <h2>User Details</h2>
+      <p><strong>Name:</strong> {userData.name}</p>
+      <p><strong>Email:</strong> {userData.email}</p>
+      <p><strong>Age:</strong> {userData.age}</p>
     </div>
   );
-}
+};
 
 export default UserDetails;
