@@ -3,7 +3,9 @@ import { fetchUserData } from "../services/githubService";
 
 const Search = () => {
   const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState(null);
+  const [location, setLocation] = useState("");
+  const [minRepos, setMinRepos] = useState("");
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -11,11 +13,15 @@ const Search = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setUserData(null);
+    setUsers([]);
 
     try {
-      const data = await fetchUserData(username);
-      setUserData(data);
+      const results = await fetchUserData(username, location, minRepos);
+      if (results.length === 0) {
+        setError("Looks like we cant find the user");
+      } else {
+        setUsers(results);
+      }
     } catch (err) {
       setError("Looks like we cant find the user");
     } finally {
@@ -24,28 +30,52 @@ const Search = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-xl mx-auto p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter GitHub username"
+          placeholder="Username"
+          className="border rounded p-2"
         />
-        <button type="submit">Search</button>
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Location"
+          className="border rounded p-2"
+        />
+        <input
+          type="number"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+          placeholder="Minimum repositories"
+          className="border rounded p-2"
+        />
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+          Search
+        </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      {userData && (
-        <div>
-          <img src={userData.avatar_url} alt={userData.login} width="100" />
-          <p>{userData.name || userData.login}</p>
-          <a href={userData.html_url} target="_blank" rel="noreferrer">
-            View Profile
-          </a>
-        </div>
-      )}
+      {loading && <p className="mt-4">Loading...</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
+
+      <div className="mt-4 space-y-4">
+        {users.map((user) => (
+          <div key={user.id} className="border p-2 rounded flex items-center gap-4">
+            <img src={user.avatar_url} alt={user.login} width="50" className="rounded-full" />
+            <div>
+              <p className="font-bold">{user.login}</p>
+              {user.location && <p>Location: {user.location}</p>}
+              <p>Repos: {user.public_repos}</p>
+              <a href={user.html_url} target="_blank" rel="noreferrer" className="text-blue-500">
+                View Profile
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
