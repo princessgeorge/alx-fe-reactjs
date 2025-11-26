@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { searchUsers } from "../services/githubService";
+import { fetchUserData, searchUsers } from "../services/githubService";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -16,11 +16,20 @@ const Search = () => {
     setUsers([]);
 
     try {
-      const results = await searchUsers({
-        username,
-        location,
-        minRepos: minRepos ? parseInt(minRepos) : null,
-      });
+      let results = [];
+
+      // If no advanced filters, fetch single user
+      if (!location && !minRepos) {
+        const user = await fetchUserData(username);
+        results = [user]; // wrap in array for consistent rendering
+      } else {
+        // Advanced search
+        results = await searchUsers({
+          username,
+          location,
+          minRepos: minRepos ? parseInt(minRepos) : null,
+        });
+      }
 
       if (results.length === 0) {
         setError("Looks like we can't find any users with these criteria");
