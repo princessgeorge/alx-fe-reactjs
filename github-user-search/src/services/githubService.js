@@ -1,13 +1,25 @@
 import axios from "axios";
 
-const BASE_SEARCH_URL = "https://api.github.com/search/users";
+// Basic user API
+const BASE_URL = "https://api.github.com/users/";
 
-export const fetchUserData = async (username, location, minRepos) => {
-  let query = username || "";
+// Advanced search API
+const SEARCH_URL = "https://api.github.com/search/users?q=";
 
-  if (location) query += `+location:${location}`;
-  if (minRepos) query += `+repos:>=${minRepos}`;
+// Fetch a single user by username (basic search)
+export const fetchUserData = async (username) => {
+  const response = await axios.get(`${BASE_URL}${username}`);
+  return response.data;
+};
 
-  const response = await axios.get(`${BASE_SEARCH_URL}?q=${query}`);
-  return response.data.items || [];
+// Advanced search function
+export const searchUsers = async ({ username, location, minRepos }) => {
+  let query = "";
+
+  if (username) query += `${username} in:login`;
+  if (location) query += ` location:${location}`;
+  if (minRepos) query += ` repos:>=${minRepos}`;
+
+  const response = await axios.get(`${SEARCH_URL}${encodeURIComponent(query)}`);
+  return response.data.items; // GitHub API wraps results in `items`
 };
