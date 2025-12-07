@@ -13,10 +13,21 @@ const HomePage = () => {
 
   return (
     <div className="px-6 py-10">
-      <h1 className="text-3xl font-bold text-center mb-8">
+      <h1 className="text-3xl font-bold text-center mb-6">
         Recipe Sharing Platform
       </h1>
 
+      {/* Add Recipe Button */}
+      <div className="text-center mb-8">
+        <Link
+          to="/add-recipe"
+          className="inline-block bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+        >
+          + Add New Recipe
+        </Link>
+      </div>
+
+      {/* Recipe Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {recipes.map((recipe) => (
           <div
