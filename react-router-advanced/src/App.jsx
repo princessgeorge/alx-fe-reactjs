@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import Post from "./components/Post";
 import ProtectedRoute from "./components/ProtectedRoute";
+import BlogPost from "./components/BlogPost";
 
 function App() {
   return (
@@ -20,8 +20,8 @@ function App() {
           }
         />
 
-        {/* Dynamic route */}
-        <Route path="/post/:postId" element={<Post />} />
+        {/* Dynamic route checker expects /blog/:id */}
+        <Route path="/blog/:id" element={<BlogPost />} />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" />} />
